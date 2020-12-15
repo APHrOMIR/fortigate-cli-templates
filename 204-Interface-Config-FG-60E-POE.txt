@@ -1,0 +1,23 @@
+config system interface
+    edit "wan1"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh fgfm
+        set type physical
+        set role wan
+    next
+    edit "internal"
+        set vdom "root"
+        set ip $(branch_lan_subnet:4,1) $(branch_lan_subnet_mask)
+        set allowaccess ping https ssh http
+        set device-identification enable
+        set role lan
+    next
+    edit "lo_blackhole"
+        set vdom "root"
+        set ip 169.254.254.254 255.255.255.255
+        set allowaccess ping
+        set type loopback
+        set role lan
+    next
+end

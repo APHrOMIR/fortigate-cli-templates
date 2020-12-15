@@ -1,0 +1,33 @@
+config vpn ipsec phase1-interface
+    edit "advpn_fex"
+        set type dynamic
+        set interface "port1"
+        set ike-version 2
+        set peertype any
+        set net-device disable
+        set proposal aes128-sha256 aes256-sha256 aes128gcm-prfsha256 aes256gcm-prfsha384 chacha20poly1305-prfsha256
+        set add-route disable
+        set dpd on-idle
+        set auto-discovery-sender enable
+        set network-overlay enable
+        set network-id 102
+        set tunnel-search nexthop
+        set psksecret ENC IgOY0hdrBaMnbsB1K09N3A5zZLaDpZSZaljxiJfx/f/B8i0fLCnrHKy8PIfb9DG9H/R5RTIzacsR/sicam80OKtKr//y7gN0ticmpmCmO00f5eEYtOa4+T6h6j+JX+87WSnBJofbL5MOfccbkceXGf1nnxcAbu6T5zg+kzu674IjSV4XYNF34cF++JPwTdEAXDu6aA==
+        set dpd-retryinterval 5
+    next
+end
+config vpn ipsec phase2-interface
+    edit "advpn_fex"
+        set phase1name "advpn_fex"
+        set proposal aes128-sha1 aes256-sha1 aes128-sha256 aes256-sha256 aes128gcm aes256gcm chacha20poly1305
+    next
+end
+config system interface
+    edit "advpn_fex"
+        set vdom "root"
+        set ip 10.255.254.1 255.255.255.255
+        set type tunnel
+        set remote-ip 10.255.254.254 255.255.255.0
+        set interface "port1"
+    next
+end

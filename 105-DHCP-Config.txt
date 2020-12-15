@@ -1,0 +1,15 @@
+config system dhcp server
+    edit 1
+        set dns-service default
+        set default-gateway $(branch_lan_subnet:4,1)
+        set netmask $(branch_lan_subnet_mask)
+        set interface "lan"
+        config ip-range
+            edit 1
+                set start-ip $(branch_lan_subnet:4,2)
+                set end-ip $(branch_lan_subnet:4,254)
+            next
+        end
+        set timezone-option default
+    next
+end

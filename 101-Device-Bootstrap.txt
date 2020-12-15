@@ -1,0 +1,10 @@
+config system global
+set hostname $(hostname)
+set timezone 65
+end
+config system admin
+edit admin
+set password fortinet
+end
+end
+

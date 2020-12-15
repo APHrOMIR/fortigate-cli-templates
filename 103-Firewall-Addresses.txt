@@ -1,0 +1,33 @@
+config firewall address
+    edit "Vocus_$(hostname)_lan_subnet"
+        set allow-routing enable
+        set subnet $(branch_lan_subnet) $(branch_lan_subnet_mask)
+    next
+    edit "Vocus_$(hostname)_guest_subnet"
+        set allow-routing enable
+        set subnet $(branch_guest_subnet) $(branch_guest_subnet_mask)
+    next
+    edit "Vocus_supernet_10.10.0.0_16"
+        set allow-routing enable
+        set subnet 10.10.0.0 255.255.0.0
+    next
+    edit "rfc_10.0.0.0_8"
+        set allow-routing enable
+    	set subnet 10.0.0.0 255.0.0.0
+    next
+    edit "rfc_172.16.0.0_20"
+        set allow-routing enable
+        set subnet 172.16.0.0 255.240.0.0
+    next
+    edit "rfc_192.168.0.0_16"
+        set allow-routing enable
+        set subnet 192.168.0.0 255.255.0.0
+    next
+end
+
+config firewall addrgrp
+    edit "rfc_private_subnets"
+        set member "rfc_10.0.0.0_8" "rfc_172.16.0.0_20" "rfc_192.168.0.0_16"
+        set allow-routing enable
+    next
+end

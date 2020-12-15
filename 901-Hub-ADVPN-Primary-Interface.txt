@@ -1,0 +1,34 @@
+config vpn ipsec phase1-interface
+    edit "advpn"
+        set type dynamic
+        set interface "port1"
+        set ike-version 2
+        set peertype any
+        set net-device disable
+        set proposal aes128-sha256 aes256-sha256 aes128gcm-prfsha256 aes256gcm-prfsha384 chacha20poly1305-prfsha256
+        set add-route disable
+        set dpd on-idle
+        set auto-discovery-sender enable
+        set network-overlay enable
+        set network-id 101
+        set tunnel-search nexthop
+        set psksecret ENC MyLmktsUBDL8KaUGNRndlQQm8UFAEkOLA9LblAsCtRYYGsDCbS1XRDVXCqC7xjGo6gzmH6uZHjvu3o4HAm3c7umsY4pDn6OXSKXe/W2Z3el0KR91jb4VctOWklBAQL7z+eOaYSOkQuVPQvv/iIKkqfePswdMQ+PAHHL5z/FDozH/sjvz8ov1H92DKOpz5KSmyYfX2Q==
+        set dpd-retryinterval 5
+    next
+end
+config vpn ipsec phase2-interface
+    edit "advpn"
+        set phase1name "advpn"
+        set proposal aes128-sha1
+    next
+end
+config system interface
+    edit "advpn"
+        set vdom "root"
+        set ip 10.255.255.1 255.255.255.255
+        set type tunnel
+        set remote-ip 10.255.255.254 255.255.255.0
+        set snmp-index 7
+        set interface "port1"
+    next
+end

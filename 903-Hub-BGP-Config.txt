@@ -1,0 +1,105 @@
+config router prefix-list
+    edit "ol2"
+    next
+    edit "ol101"
+        config rule
+            edit 1
+                set prefix 10.255.255.0 255.255.255.0
+                unset ge
+                unset le
+            next
+        end
+    next
+    edit "ol102"
+        config rule
+            edit 1
+                set prefix 10.255.254.0 255.255.255.0
+                unset ge
+                unset le
+            next
+        end
+    next
+end
+config router route-map
+    edit "rmap-101-out"
+        config rule
+            edit 1
+                set action deny
+                set match-ip-nexthop "ol102"
+                unset set-ip-nexthop
+                unset set-ip6-nexthop
+                unset set-ip6-nexthop-local
+                unset set-originator-id
+            next
+            edit 2
+                unset set-ip-nexthop
+                unset set-ip6-nexthop
+                unset set-ip6-nexthop-local
+                unset set-originator-id
+            next
+        end
+    next
+    edit "rmap-102-out"
+        config rule
+            edit 1
+                set action deny
+                set match-ip-nexthop "ol101"
+                unset set-ip-nexthop
+                unset set-ip6-nexthop
+                unset set-ip6-nexthop-local
+                unset set-originator-id
+            next
+            edit 2
+                unset set-ip-nexthop
+                unset set-ip6-nexthop
+                unset set-ip6-nexthop-local
+                unset set-originator-id
+            next
+        end
+    next
+end
+config router bgp
+    set as 65000
+    set router-id $(hub_mgmt_subnet:4,1)
+    set ibgp-multipath enable
+    set additional-path enable
+    config neighbor-group
+        edit "advpn_peers"
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set remote-as 65000
+            set route-map-out "rmap-101-out"
+            set keep-alive-timer 1
+            set holdtime-timer 3
+            set additional-path both
+            set route-reflector-client enable
+        next
+        edit "fexadvpn_peers"
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set remote-as 65000
+            set route-map-out "rmap-102-out"
+            set keep-alive-timer 1
+            set holdtime-timer 3
+            set additional-path both
+            set route-reflector-client enable
+        next
+    end
+    config neighbor-range
+        edit 1
+            set prefix 10.255.255.0 255.255.255.0
+            set neighbor-group "advpn_peers"
+        next
+        edit 2
+            set prefix 10.255.254.0 255.255.255.0
+            set neighbor-group "fexadvpn_peers"
+        next
+    end
+    config network
+        edit 1
+            set prefix $(hub_mgmt_subnet) $(hub_mgmt_subnet_mask)
+        next
+    end
+end

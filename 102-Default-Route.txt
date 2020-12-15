@@ -1,0 +1,16 @@
+config system sdwan
+set status enable
+end
+config router static
+    edit 1
+        set distance 5
+        set device "wan1"
+        set dynamic-gateway enable
+    next
+    edit 2
+        set distance 5
+        set priority 10
+        set device "wan2"
+        set dynamic-gateway enable
+    next
+end

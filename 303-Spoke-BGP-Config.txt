@@ -1,0 +1,32 @@
+config router bgp
+    set as 65000
+    set router-id $(branch_lan_subnet:4,1)
+    set ibgp-multipath enable
+    set additional-path enable
+    set distance-local 3
+    config neighbor
+        edit "10.255.255.1"
+            set advertisement-interval 1
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set remote-as 65000
+            set keep-alive-timer 1
+            set holdtime-timer 3
+            set additional-path both
+        next
+        edit "10.255.254.1"
+            set advertisement-interval 1
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set remote-as 65000
+            set keep-alive-timer 1
+            set holdtime-timer 3
+            set additional-path both
+        next
+    end
+    config network
+        edit 1
+            set prefix $(branch_lan_subnet) $(branch_lan_subnet_mask)
+        next
+    end
+end

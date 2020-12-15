@@ -1,0 +1,32 @@
+config router policy
+config router policy
+    edit 1
+        set input-device "advpn"
+        set src "192.168.0.0/255.255.0.0" "172.16.0.0/255.240.0.0" "10.0.0.0/255.0.0.0"
+        set dst "10.0.0.0/255.0.0.0" "172.16.0.0/255.240.0.0" "192.168.0.0/255.255.0.0"
+        set output-device "advpn"
+    next
+    edit 2
+        set input-device "advpn"
+        set src "192.168.0.0/255.255.0.0" "172.16.0.0/255.240.0.0" "10.0.0.0/255.0.0.0"
+        set dst "10.0.0.0/255.0.0.0" "172.16.0.0/255.240.0.0" "192.168.0.0/255.255.0.0"
+        set protocol 17
+        set start-port 4500
+        set output-device "advpn"
+    next
+    edit 3
+        set input-device "advpn_fex"
+        set src "192.168.0.0/255.255.0.0" "172.16.0.0/255.240.0.0" "10.0.0.0/255.0.0.0"
+        set dst "10.0.0.0/255.0.0.0" "172.16.0.0/255.240.0.0" "192.168.0.0/255.255.0.0"
+        set output-device "advpn_fex"
+    next
+    edit 4
+        set input-device "advpn_fex"
+        set src "192.168.0.0/255.255.0.0" "172.16.0.0/255.240.0.0" "10.0.0.0/255.0.0.0"
+        set dst "10.0.0.0/255.0.0.0" "172.16.0.0/255.240.0.0" "192.168.0.0/255.255.0.0"
+        set protocol 17
+        set start-port 4500
+        set output-device "advpn_fex"
+    next
+end
+end

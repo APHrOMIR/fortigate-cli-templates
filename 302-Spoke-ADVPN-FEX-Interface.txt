@@ -1,0 +1,32 @@
+config vpn ipsec phase1-interface
+edit "fex_advpn"
+set type static
+        set interface "wan2"
+        set ike-version 2
+        set peertype any
+        set net-device enable
+        set proposal aes128-sha256 aes256-sha256 aes128gcm-prfsha256 aes256gcm-prfsha384 chacha20poly1305-prfsha256
+        set add-route disable
+        set dpd on-idle
+        set auto-discovery-receiver enable
+        set network-overlay enable
+        set network-id 102
+        set remote-gw $(advpn_remote_gw)
+        set psksecret $(advpn_psksecret)
+        set dpd-retryinterval 5
+next
+end
+config vpn ipsec phase2-interface
+edit "fex_advpn"
+set phase1name "fex_advpn"
+set proposal aes128-sha1
+set auto-negotiate enable
+next
+end
+config system interface
+edit "fex_advpn"
+       set ip 10.255.254.$(advpn_site_id)/32
+       set type tunnel
+       set remote-ip 10.255.254.1/24
+next
+end
